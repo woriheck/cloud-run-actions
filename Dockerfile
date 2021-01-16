@@ -16,7 +16,8 @@ COPY . .
 RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/  --version=1.10.6 --filename=composer && \
     composer install --optimize-autoloader --no-dev --no-interaction
 
-RUN chown -R nginx:www-data /var/www/html && \
+RUN cp .env.prod .env && \
+    chown -R nginx:www-data /var/www/html && \
     rm -f /etc/supervisord.conf && \
     mkdir -p /var/www/html \
              /var/log/supervisor \
