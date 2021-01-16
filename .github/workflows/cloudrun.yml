@@ -25,10 +25,11 @@ env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   SERVICE: app-cloud-run
   REGION: asia-southeast1
-  IMAGE: gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
 
 jobs:
   deploy:
+    env:
+      IMAGE: gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
