@@ -41,6 +41,11 @@ jobs:
     - name: Authorize Docker push
       run: gcloud auth configure-docker
 
+    - name: Installing dependecy
+      run: |-
+        docker volume create vendor
+        docker run -ti --rm -v vendor:/app/vendor -v $PWD:/app composer:1.10.19 install --optimize-autoloader --no-dev
+
     - name: Build and Push Container
       run: |-
         docker build -t gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} .
