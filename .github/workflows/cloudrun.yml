@@ -43,8 +43,8 @@ jobs:
     - name: Authorize docker
       run: gcloud auth configure-docker
 
-    - name: Install composer dependecy
-      run: docker run --rm -v ${PWD}/vendor:/app/vendor -v $PWD:/app composer:1.10.19 install --optimize-autoloader --no-dev
+    # - name: Install composer dependecy
+    #   run: docker run --rm -v ${PWD}/vendor:/app/vendor -v $PWD:/app composer:1.10.19 install --optimize-autoloader --no-dev
 
     - name: Build container
       run: docker build -t ${{ env.IMAGE }} .
