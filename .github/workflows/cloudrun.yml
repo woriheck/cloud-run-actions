@@ -44,7 +44,7 @@ jobs:
     - name: Installing dependecy
       run: |-
         docker volume create vendor
-        docker run -ti --rm -v vendor:/app/vendor -v $PWD:/app composer:1.10.19 install --optimize-autoloader --no-dev
+        docker run --rm -v vendor:/app/vendor -v $PWD:/app composer:1.10.19 install --optimize-autoloader --no-dev
 
     - name: Build and Push Container
       run: |-
