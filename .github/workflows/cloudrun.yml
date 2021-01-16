@@ -1,3 +1,4 @@
+# Source:
 # https://github.com/google-github-actions/setup-gcloud/blob/master/example-workflows/cloud-run/cloud-run.yml
 
 # Copyright 2019 Google, LLC.
@@ -24,6 +25,7 @@ env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   SERVICE: app-cloud-run
   REGION: asia-southeast1
+  IMAGE: gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
 
 jobs:
   deploy:
@@ -38,24 +40,23 @@ jobs:
         project_id: ${{ env.PROJECT_ID }}
         service_account_key: ${{ secrets.GPC_CREDENTIALS }}
 
-    - name: Authorize Docker push
+    - name: Authorize docker
       run: gcloud auth configure-docker
 
-    - name: Installing dependecy
-      run: |-
-        docker volume create vendor
-        docker run --rm -v vendor:/app/vendor -v $PWD:/app composer:1.10.19 install --optimize-autoloader --no-dev
+    - name: Install composer dependecy
+      run: docker run --rm -v ${PWD}/vendor:/app/vendor -v $PWD:/app composer:1.10.19 install --optimize-autoloader --no-dev
 
-    - name: Build and Push Container
-      run: |-
-        docker build -t gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} .
-        docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }}
+    - name: Build container
+      run: docker build -t ${{ env.IMAGE }} .
+
+    - name: Push container
+      run: docker push ${{ env.IMAGE }}
 
     - name: Deploy to Cloud Run
       run: |-
         gcloud run deploy ${{ env.SERVICE }} \
           --region ${{ env.REGION }} \
-          --image gcr.io/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{  github.sha }} \
+          --image ${{ env.IMAGE }} \
           --platform "managed" \
           --allow-unauthenticated \
           --quiet
