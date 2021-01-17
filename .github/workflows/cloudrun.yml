@@ -47,6 +47,8 @@ jobs:
       run: |-
         docker run -v ${PWD}/node_modules:/usr/src/app/node_modules -v $PWD:/usr/src/app -w /usr/src/app node:15.5.1 npm install
         docker run -v ${PWD}/public:/usr/src/app/public -v $PWD:/usr/src/app -w /usr/src/app node:15.5.1 npm run prod
+        ls -ltra ${PWD}/public
+        ls -ltra ${PWD}/node_modules
 
     - name: Install composer dependecy
       run: docker run --rm -v ${PWD}/vendor:/app/vendor -v $PWD:/app composer:1.10.19 install --optimize-autoloader --no-dev

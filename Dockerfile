@@ -13,6 +13,9 @@ COPY docker/supervisor/program.conf /etc/supervisor/conf.d/program.conf
 WORKDIR /var/www/html
 COPY . .
 RUN cp .env.prod .env && \
+    php artisan config:cache && \
+    php artisan route:cache && \
+    php artisan view:cache && \
     chown -R nginx:www-data /var/www/html && \
     rm -f /etc/supervisord.conf && \
     mkdir -p /var/www/html \
