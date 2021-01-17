@@ -17,8 +17,9 @@
 
 on:
   push:
-    branches:
-    - master
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 name: Build and Deploy to Cloud Run
 env:
@@ -28,7 +29,7 @@ env:
   IMAGE: gcr.io/${{ secrets.GCP_PROJECT_ID }}/app-cloud-run:${{ github.sha }}
 
 jobs:
-  deploy:
+  cloud-run-deploy:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
