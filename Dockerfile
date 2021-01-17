@@ -12,17 +12,14 @@ COPY docker/supervisor/program.conf /etc/supervisor/conf.d/program.conf
 
 WORKDIR /var/www/html
 COPY . .
-RUN ls -ltra public/css
-RUN ls -ltra public/js
-RUN ls -ltra public/index.php
+
 RUN cp .env.prod .env && \
     php artisan config:cache && \
     php artisan route:cache && \
     php artisan view:cache && \
     chown -R nginx:www-data /var/www/html && \
     rm -f /etc/supervisord.conf && \
-    mkdir -p /var/www/html \
-             /var/log/supervisor \
+    mkdir -p /var/log/supervisor \
              /run/nginx \
              /run/php \
              /run/supervisor
