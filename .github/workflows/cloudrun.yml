@@ -43,8 +43,19 @@ jobs:
     - name: Authorize docker
       run: gcloud auth configure-docker
 
+    - name: Install npm dependecy
+      run: |-
+        docker run -v ${PWD}/node_modules:/usr/src/app/node_modules -v $PWD:/usr/src/app -w /usr/src/app node:15.5.1 npm install
+        docker run -v ${PWD}/public:/usr/src/app/public -v $PWD:/usr/src/app -w /usr/src/app node:15.5.1 npm run prod
+
     - name: Install composer dependecy
       run: docker run --rm -v ${PWD}/vendor:/app/vendor -v $PWD:/app composer:1.10.19 install --optimize-autoloader --no-dev
+
+    - name: Production optimization
+      run: |-
+         php artisan config:cache
+         php artisan route:cache
+         php artisan view:cache
 
     - name: Build container
       run: docker build -t ${{ env.IMAGE }} .
