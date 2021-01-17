@@ -44,10 +44,7 @@ jobs:
       run: gcloud auth configure-docker
 
     - name: Install npm dependecy
-      run: |-
-        docker run -v ${PWD}/public:/usr/src/app/public -v $PWD:/usr/src/app -w /usr/src/app node:15.5.1 npm install && npm run prod
-        ls -ltra ${PWD}/public/css
-        ls -ltra ${PWD}/public/js
+      run: docker run --rm -v ${PWD}/public:/usr/src/app/public -v ${PWD}/:/usr/src/app -w /usr/src/app node:15.5.1 npm install && npm run prod
 
     - name: Install composer dependecy
       run: docker run --rm -v ${PWD}/vendor:/app/vendor -v $PWD:/app composer:1.10.19 install --optimize-autoloader --no-dev
